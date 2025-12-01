@@ -230,8 +230,8 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
     <th>🗺️ <br> <b>Peta – K-Medoids</b></th>
   </tr>
   <tr>
-    <td><img src="Image/Peta_K-means.png" width="450"></td>
-    <td><img src="Image/Peta_K-medoids.png" width="450"></td>
+    <td><img src="Image/K-Means_Map.jpg" width="450"></td>
+    <td><img src="Image/K-Medoids_Map.jpg" width="450"></td>
   </tr>
 </table>
 
