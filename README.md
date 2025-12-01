@@ -226,8 +226,8 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 ## 1. 🗺️ Peta
 <table align="center">
   <tr>
-    <th>🗺️ <br> <b>Peta – K-Means</b></th>
-    <th>🗺️ <br> <b>Peta – K-Medoids</b></th>
+    <th> <b>Peta – K-Means</b></th>
+    <th> <b>Peta – K-Medoids</b></th>
   </tr>
   <tr>
     <td><img src="Image/K-Means_Map.jpg" width="450"></td>
@@ -236,12 +236,11 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 </table>
 
 
-
 ## 2. 📊 Barplot
 <table align="center">
   <tr>
-    <th>📊 <br> <b>Barplot – K-Means</b></th>
-    <th>📊 <br> <b>Barplot – K-Medoids</b></th>
+    <th> <b>Barplot – K-Means</b></th>
+    <th> <b>Barplot – K-Medoids</b></th>
   </tr>
   <tr>
     <td><img src="Image/barplot k-means.jpg" width="420"></td>
@@ -253,8 +252,8 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 ## 3. 🕸️ Radar Chart
 <table align="center">
   <tr>
-    <th>🕸️ <br> <b>Radar – K-Means</b></th>
-    <th>🕸️ <br> <b>Radar – K-Medoids</b></th>
+    <th> <b>Radar – K-Means</b></th>
+    <th> <b>Radar – K-Medoids</b></th>
   </tr>
   <tr>
     <td><img src="Image/radar k-means.jpg" width="450"></td>
@@ -266,8 +265,8 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 ## 4. 📦 Boxplot
 <table align="center">
   <tr>
-    <th>📦 <br> <b>Boxplot – K-Means</b></th>
-    <th>📦 <br> <b>Boxplot – K-Medoids</b></th>
+    <th> <b>Boxplot – K-Means</b></th>
+    <th> <b>Boxplot – K-Medoids</b></th>
   </tr>
   <tr>
     <td><img src="Image/boxplot k-means.jpg" width="450"></td>
@@ -278,8 +277,8 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 ## 5. 🔥 Heatmap
  <table align="center">
   <tr>
-    <th>🔥 <br> <b>Heatmap – K-Means</b></th>
-    <th>🔥 <br> <b>Heatmap – K-Medoids</b></th>
+    <th> <b>Heatmap – K-Means</b></th>
+    <th> <b>Heatmap – K-Medoids</b></th>
   </tr>
   <tr>
     <td><img src="Image/k-means_heatmap.jpeg" width="450"></td>
