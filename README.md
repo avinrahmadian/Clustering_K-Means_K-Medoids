@@ -164,7 +164,7 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
   <img src="Image/K-means_PCA.png" alt="Plot Cluster K-Medoids" style="width:50%; max-width:40px;">
 </div>
 <br>
-<div> Plot K-Means di atas menampilkan posisi Kabupaten/Kota dalam dua dimensi hasil pemetaan jarak, di mana sumbu X (Dim1) dan sumbu Y (Dim2) merepresentasikan dua dimensi utama dari jarak Euclidean setelah data distandarisasi, titik berwarna menunjukkan cluster masing-masing daerah, dan poligon menggambarkan sebaran objek dalam setiap cluster. Tabel anggota tiap kelompok disajikan dalam tabel berikut.
+<div> Plot K-Means di atas menampilkan posisi Kabupaten/Kota dalam dua dimensi hasil pemetaan jarak, di mana sumbu X (Comp.1) dan sumbu Y (Comp.2) merepresentasikan dua dimensi utama dari jarak Euclidean setelah data distandarisasi, titik berwarna menunjukkan cluster masing-masing daerah, dan poligon menggambarkan sebaran objek dalam setiap cluster. Tabel anggota tiap kelompok disajikan dalam tabel berikut.
 
 | Kelompok | Kabupaten/Kota | Jumlah Anggota | Keterangan |
 |----------|-----------------|----------------|------------|
