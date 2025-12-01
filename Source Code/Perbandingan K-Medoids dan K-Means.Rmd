@@ -1,0 +1,729 @@
+---
+title: "Clustering Kemiskinan"
+author: "Wita"
+date: "2025-11-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)  # data manipulation
+library(cluster)    # clustering algorithms
+library(factoextra) # clustering algorithms & visualization
+```
+
+## Input Data
+
+```{r}
+library(readxl)
+pempro <- read_excel("D:\\IPB\\Pemrograman Statistka\\Data Kemiskinan.xlsx")
+pempro
+```
+
+```{r}
+View(pempro)
+```
+
+## Ringkasan Data
+
+```{r}
+summary(pempro)
+```
+
+## Mengubah nama variabel menjadi index
+
+```{r}
+index <- pempro[,c(2:10)]
+rownames(index) <- pempro$`Kabupaten/Kota`[1:27]
+head(index)
+```
+
+```{r}
+boxplot(index,
+        main = "Boxplot Indikator Kemiskinan",
+        col = "#F8C630",
+        border = "#00E676")
+```
+1.  **Indikator dengan nilai tingg**i (X6 (Persentase Rumah Tangga Miskin yang menggunakan Air Layak) dan X7 (Presentase Rumah Tangga Miskin yang menggunakan Jamban Sendiri/Bersama)), memiliki nilai rata-rata paling tinggi. Sebagian besar data indikator X6 dan X7 berada di rentang nilai tinggi dan cenderung konsisten. Terdapat beberapa outlier untuk X7.
+
+2.  **Indikator dengan nilai sedang dan variabilitas tinggi** (X4 (Presentase Pengeluaran per Kapita Rumah Tangga Miskin untuk Makanan)), terdapat outlier untuk X4.
+
+3.  **Indikator dengan nilai sedang dan variabilitas menengah** (X1 (Presentase Penduduk Miskin Usia 15+ Tidak Bekerja), X2 (Presentase Penduduk Miskin Usia 15+ Pekerja Informal), X3 (Presentase Penduduk Miskin Usia 15+ Pekerja Formal), dan X5 (Presentase Pengeluaran per Kapita Rumah Tangga Miskin untuk Bukan Makanan)), terdapat outlier untuk X1 dan X5
+
+4.  **Indikator dengan nilai sangat rendah** (X8 (Indeks Kedalaman Kemiskinan) dan X9 (Indeks Keparahan Kemiskinan)), memiliki nilai yang sangat rendahdengan median mendekati 0.
+
+## Matriks Korelasi
+
+```{r}
+library(PerformanceAnalytics)
+cor_matrix <- cor(index, method = "pearson")
+chart.Correlation(index)
+```
+
+Jadi, yang dibuang variabel X3, X5, dan X9.
+
+Walaupun X2 (pekerja informal) dan X3 (pekerja formal) memiliki korelasi yang sangat tinggi (r ??? ???0.92), secara substansi X2 lebih relevan dalam menjelaskan kerentanan kemiskinan. Pekerja informal merupakan kelompok tenaga kerja yang paling rentan terhadap fluktuasi ekonomi, tidak memiliki jaminan kerja, serta mendominasi rumah tangga miskin di Indonesia. Sementara itu, pekerja formal cenderung memiliki pendapatan stabil dan jarang masuk kategori penduduk miskin. Oleh karena itu, X2 dipertahankan sebagai indikator yang lebih representatif, sedangkan X3 dihilangkan karena redundant secara statistik dan kurang relevan secara substantif.
+
+## Analisis Komponen Utama
+
+### Pilih Variabel
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+data_seleksi <- index %>%
+  dplyr::select(X1, X2, X4, X6, X7, X8)
+str(data_seleksi)
+```
+
+### Uji Korelasi Data Seleksi
+
+```{r}
+cor_matrix <- cor(data_seleksi, method = "pearson")
+chart.Correlation(data_seleksi)
+```
+
+
+### Pengujian asumsi kecukupan data dan uji kelayakan model (KMO)
+
+Uji kecukupan data menggunakan metode Kaiser-Mayer-Olkin (KMO) dan uji kelayakan setiap variabel menggunakan Measure of Sampling Adequacy (MSA).
+
+```{r}
+kmo_res <- psych::KMO(cor_matrix)
+kmo_res
+```
+Variabel X8 tetap dipertahankan karena tujuan PCA adalah reduksi dimensi sebelum clustering, bukan mencari faktor.
+
+### Uji korelasi antar variabel (multikolinearitas)
+
+```{r}
+# 2.3 Bartlett's test of sphericity
+bart_res <- psych::cortest.bartlett(cor_matrix, n = nrow(data_seleksi))
+bart_res  # lihat chi-square dan p-value
+```
+
+### Menentukan banyak faktor yang terbentuk dari nilai eigen
+
+```{r}
+# Matriks korelasi
+R <- cor(data_seleksi)
+
+# Hitung eigenvalue dan eigenvector
+eig <- eigen(R)
+
+# Tampilkan eigenvalue
+eig$values
+
+```
+
+Ambil yang eigenvalue \> 1 untuk menentukan banyak komponen PCA-nya. Dari hasil diperoleh ada 2 nilai yang akan diambil menjadi komponen utama (PC1 dan PC2).
+
+### Proses pembentukan komponen utama
+
+```{r}
+rownames(data_seleksi) <- pempro$`Kabupaten/Kota`
+```
+
+```{r}
+pcadata <- princomp(data_seleksi, cor = TRUE, score = TRUE)
+summary(pcadata)
+```
+
+Proportion of variance menjelaskan seberapa banyak komponen berkontribusi dalam menjelaskan data.
+
+##### Menampilkan vektor eigen yang akan digunakan untuk menentukan kombinasi linear dari setiap komponen utama
+
+```{r}
+loadings(pcadata)
+```
+
+Nilai loadings menunjukkan seberapa kuat suatu variabel mempengaruhi komponen utama, nilai kosong itu soalnya nilainya mendekati 0 jadi ga kebaca.
+
+##### Ambil dua komponen yaitu PC1 dan PC2 karena eigenvalues-nya \> 1
+
+```{r}
+pca_scores <- pcadata$scores[, 1:2]
+pca_scores
+```
+
+## K-Means dari Data PCA
+
+### Menghitung jarak antar observasi (berdasarkan skor PCA)
+
+```{r}
+library(factoextra)
+jarak <- get_dist(pca_scores)
+fviz_dist(jarak, gradient = list(low = "#00AFBB", mid = "white", high = "#FC4E07"))
+```
+
+Menentukan banyaknya cluster optimal (Silhouette, di ruang PCA)
+
+```{r}
+fviz_nbclust(pca_scores, kmeans, method = "silhouette")
+```
+
+### Pembentukan Cluster (misal k = 4, dari silhouette)
+
+```{r}
+set.seed(123)
+kmeans4 <- kmeans(pca_scores, centers = 4, nstart = 25)
+kmeans4
+```
+
+### Visualisasi cluster (di ruang PCA)
+
+```{r}
+fviz_cluster(kmeans4, data = pca_scores)
+```
+
+
+### Silhouette score keseluruhan
+
+```{r}
+library(ggpubr)
+library(cluster) 
+sil_kmeans <- silhouette(kmeans4$cluster, dist(pca_scores))
+mean_sil <- mean(sil_kmeans[, 3])
+cat("Rata-rata silhouette K-Means (k = 4):", round(mean_sil, 3), "\n")
+fviz_silhouette(sil_kmeans)
+```
+### Data frame hasil pengelompokkan
+
+```{r}
+hasil_km <- data.frame(pempro, cluster_km = kmeans4$cluster)
+hasil_km
+```
+
+### Save K-Means
+
+```{r}
+library(writexl)
+#write_xlsx(mean_total,"D:\\IPB\\Pemrograman Statistka\\Rata-Rata Cluster.xlsx")
+write_xlsx(hasil_km,"D:\\IPB\\Pemrograman Statistka\\Clustering K-Means Fix.xlsx")
+```
+
+## Visualisasi
+
+### Peta Klasterisasi
+
+```{r}
+library(sf)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+#indo_kab <- st_read("D:/Pascasarjana IPB/Semester 1/Pemograman Statistika/Pempro Project/Admin2Kabupaten/idn_admbnda_adm2_bps_20200401.shp")
+```
+
+```{r}
+# Filter Jabar + hapus waduk
+#jabar_map <- indo_kab %>%
+  #filter(ADM1_EN == "Jawa Barat") %>%
+  #filter(!ADM2_EN %in% c("Waduk Cirata", "Cirata Reservoir", "Waduk Jatiluhur"))
+
+# Join dengan data cluster
+#jabar_cluster <- jabar_map %>%
+  #left_join(hasil, by = c("ADM2_EN" = "Kabupaten_Kota"))
+
+# Plot peta
+#ggplot(jabar_cluster) +
+  #geom_sf(aes(fill = factor(Cluster))) +
+  #geom_sf_text(aes(label = ADM2_EN), size = 3, color = "black") +
+  #scale_fill_brewer(palette = "Set2") +
+  #labs(title = "Peta Cluster Kemiskinan Jawa Barat",
+       #fill = "Cluster") +
+  #theme_minimal()
+```
+
+### Radar Chart
+
+```{r}
+library(dplyr)
+library(fmsb)
+library(scales)
+
+# --- Rata-rata tiap variabel X per cluster K-means ---
+mean_table_km <- hasil_km %>% 
+  group_by(cluster_km) %>% 
+  summarise(across(starts_with("X"), mean, na.rm = TRUE))
+
+mean_table_km
+
+# Buang kolom cluster, jadikan row = cluster
+radar_df_km <- as.data.frame(mean_table_km[, -1])
+rownames(radar_df_km) <- paste0("Cluster ", mean_table_km$cluster_km)
+
+# Baris max & min (wajib untuk fmsb)
+maxs_km <- apply(radar_df_km, 2, max)
+mins_km <- apply(radar_df_km, 2, min)
+
+radar_data_km <- rbind(maxs_km, mins_km, radar_df_km)
+radar_data_km
+
+# Palet warna ceria
+colors_border <- c(
+  "#F6416C",  # bubblegum pink
+  "#F8C630",  # gold cerah
+  "#00E676",  # turquoise cerah
+  "#08D9D6"   # neon aqua
+)
+
+colors_in <- alpha(colors_border, 0.3)
+
+radarchart(
+  radar_data_km,
+  axistype   = 1,
+  pcol       = colors_border,
+  pfcol      = colors_in,
+  plwd       = 3,
+  plty       = 1,
+  cglcol     = "grey80",
+  cglty      = 1,
+  cglwd      = 0.8,
+  axislabcol = "grey30",
+  vlcex      = 0.9,
+  title      = "Radar Chart Rata-Rata Indikator Kemiskinan per Cluster (K-Means)"
+)
+
+legend(
+  "topright",
+  legend   = rownames(radar_data_km)[-c(1, 2)],
+  bty      = "n",
+  pch      = 20,
+  col      = colors_border,
+  text.col = "grey20",
+  cex      = 0.9,
+  pt.cex   = 1.6
+)
+```
+
+### Barplot Cluster
+
+```{r}
+# Buat tabel frekuensi
+cluster_count <- table(hasil_km$cluster_km)
+
+# Simpan posisi batang ke variabel bp
+bp <- barplot(cluster_count,
+              main = "Jumlah Kabupaten/Kota per Cluster",
+              xlab = "Cluster",
+              ylab = "Jumlah Kabupaten/Kota",
+              col  = c("#F6416C", "#F8C630",
+                       "#00E676","#08D9D6"),
+              ylim = c(0, max(cluster_count) + 2))  
+
+# Tambahkan label di dalam batang
+text(x = bp,
+     y = cluster_count/2,
+     labels = cluster_count,
+     cex = 1.2,
+     font = 2,
+     col = "black")
+```
+
+### Boxplot
+
+```{r}
+data_long_km <- hasil_km %>% 
+  pivot_longer(
+    cols      = starts_with("X"),
+    names_to  = "variabel",
+    values_to = "value"
+  )
+
+ggplot(data_long_km, aes(x = factor(cluster_km), y = value, fill = factor(cluster_km))) +
+  geom_boxplot(alpha = 0.8, outlier.color = "black") +
+  facet_wrap(~ variabel, scales = "free_y") +
+  scale_fill_manual(values = c(
+    "1" = "#F6416C",
+    "2" = "#F8C630",
+    "3" = "#00E676",
+    "4" = "#08D9D6"
+  )) +
+  theme_minimal(base_size = 13) +
+  labs(
+    title = "Boxplot Variabel per Cluster (K-Means)",
+    x     = "Cluster K-Means",
+    y     = "Nilai"
+  )
+```
+
+### HeatMap
+
+```{r}
+heat_long_km <- hasil_km %>% 
+  pivot_longer(
+    cols      = starts_with("X"),
+    names_to  = "variabel",
+    values_to = "value"
+  )
+
+# pastikan nama kolom kab/kota sesuai (sesuaikan jika beda)
+heat_long_km <- heat_long_km %>% 
+  arrange(cluster_km, Kabupaten.Kota) %>% 
+  mutate(Kabupaten.Kota = factor(Kabupaten.Kota, levels = unique(Kabupaten.Kota)))
+
+ggplot(heat_long_km, aes(x = variabel, y = Kabupaten.Kota, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradientn(
+    colours = c("#F8F9FA", "#FFDAC1", "#FF9AA2", "#FF6F91"),
+    name    = "Nilai"
+  ) +
+  facet_grid(cluster_km ~ ., scales = "free_y", space = "free_y") +
+  labs(
+    title = "Heatmap Indikator Kemiskinan per Kabupaten/Kota\nBerdasarkan Cluster K-Means",
+    x     = "Variabel",
+    y     = "Kabupaten/Kota"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    panel.grid      = element_blank(),
+    axis.text.x     = element_text(angle = 45, hjust = 1),
+    strip.background= element_rect(fill = "#FFE082", color = NA),
+    strip.text      = element_text(face = "bold")
+  )
+```
+
+## Interpretasi Visualisasi
+--isi sendiri ya hehe----\
+
+# Analasis K-Medoids
+
+## Melakukan standarisasi data
+
+```{r}
+data_standarisai <- scale(index)
+```
+
+```{r}
+library(tidyverse)  # data manipulation
+library(cluster)    # clustering algorithms
+library(factoextra) # clustering algorithms & visualization
+
+```
+
+## Penentuan jumlah cluster
+
+```{r}
+# silhouette
+fviz_nbclust(data_standarisai, pam, method = "silhouette")
+```
+
+```{r}
+# pamk
+library(fpc)
+pamk.result <- pamk(data_standarisai)
+pamk.result$nc
+```
+
+### K-Medoids cluster
+
+```{r}
+library(cluster)
+pam.result <- pam(data_standarisai,4)
+print(pam.result)
+```
+
+### Jarak Euclidean
+
+```{r}
+pam.result$diss
+```
+
+### Hasil Cluster
+
+```{r}
+df.cluster = data.frame(data_standarisai,pam.result$cluster)
+View(df.cluster)
+```
+
+### Plot Cluster
+
+```{r}
+fviz_cluster(pam.result, data = index)
+?fviz_cluster
+```
+
+### Silhouette Score
+
+```{r}
+library(cluster)
+library(factoextra)
+
+# --- 1) Hitung silhouette untuk PAM ---
+sil_pam <- silhouette(pam.result$cluster, dist(data_standarisai))
+
+# Silhouette rata-rata keseluruhan
+sil_overall_pam <- mean(sil_pam[, 3])
+sil_overall_pam
+
+# --- 2) Silhouette rata-rata per klaster ---
+sil_per_cluster_pam <- tapply(sil_pam[, 3], pam.result$cluster, mean)
+sil_per_cluster_pam
+
+# --- 3) Visualisasi silhouette ---
+fviz_silhouette(sil_pam)
+
+# --- 4) Data frame ringkasan (mirip sil_df sebelumnya) ---
+sil_df_pam <- data.frame(
+  Cluster    = names(sil_per_cluster_pam),
+  Silhouette = as.numeric(sil_per_cluster_pam)
+)
+
+sil_df_pam
+
+```
+Cluster 4 adalah cluster yang paling kuat, dikarenakan hampir semua objek di cluster ini memiliki nilai silhouette di atas rata-rata yaitu sebesar 0.4521533 (45.22%). Cluster 3, memiliki beberapa objek dengan nilai silhouette di atas rata-rata, tetapi terdapat objek yang berada di bawah rata-rata dengan nilai silhouette score sebesar 0.2973059 (29.73%). Cluster 2, hampir sama dengan cluster 3, tetapi memiliki objek yang berada di bawah rata-rata nilai silhouette yang lebih banyak dengan silhouette score sebesar 0.2035214 (20.35%). Cluster 1, hampir sama juga dengan cluster 2, dengan silhouette score sebesar 0.22145530 (22.16%).
+
+Diperoleh Silhouette score dari metode k-medoids sebesar 0.2718594 atau 27.19%.
+
+#### Karakteristik setiap cluster
+
+1.  **Cluster 1 (Merah)**
+
+    *Cluster* ini cenderung memiliki karakteristik yang serupa dan memiliki sebaran yang cukup luas.
+
+2.  **Cluster 2 (Hijau)**
+
+    Memiliki sebaran yang relatif padat dan terkumpul di sudut kanan bawah.
+
+3.  **Cluster 3 (Biru)**
+
+    Memiliki sebaran yang juga luas seperti cluster 1.
+
+4.  **Cluster 4 (Ungu)**
+
+    Memiliki sebaran yang paling kecil dengan karakteristik yang paling mirip dan paling seragam dalam kelompoknya.
+
+### Data frame hasil pengelompokkan
+
+```{r}
+hasil <- data.frame(pempro, cluster = pam.result$cluster)
+head(hasil)
+
+```
+
+### Save
+
+```{r}
+library(writexl)
+#write_xlsx(mean_total,"D:\\IPB\\Pemrograman Statistka\\Rata-Rata Cluster.xlsx")
+#write_xlsx(hasil,"D:\\IPB\\Pemrograman Statistka\\Clustering K-Medoid Fix.xlsx")
+```
+
+## Visualisasi
+
+### Peta Klasterisasi
+
+```{r}
+library(sf)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+#indo_kab <- st_read("D:/Pascasarjana IPB/Semester 1/Pemograman Statistika/Pempro Project/Admin2Kabupaten/idn_admbnda_adm2_bps_20200401.shp")
+```
+
+```{r}
+# Filter Jabar + hapus waduk
+#jabar_map <- indo_kab %>%
+  #filter(ADM1_EN == "Jawa Barat") %>%
+  #filter(!ADM2_EN %in% c("Waduk Cirata", "Cirata Reservoir", "Waduk Jatiluhur"))
+
+# Join dengan data cluster
+#jabar_cluster <- jabar_map %>%
+  #left_join(hasil, by = c("ADM2_EN" = "Kabupaten_Kota"))
+
+# Plot peta
+#ggplot(jabar_cluster) +
+  #geom_sf(aes(fill = factor(Cluster))) +
+  #geom_sf_text(aes(label = ADM2_EN), size = 3, color = "black") +
+  #scale_fill_brewer(palette = "Set2") +
+  #labs(title = "Peta Cluster Kemiskinan Jawa Barat",
+       #fill = "Cluster") +
+  #theme_minimal()
+```
+
+### Radar Chart
+
+```{r}
+library(dplyr)
+
+mean_table <- hasil %>% 
+  group_by(cluster) %>% 
+  summarise(across(starts_with("X"), mean, na.rm = TRUE))
+
+mean_table
+
+# install dulu kalau belum
+# install.packages("fmsb")
+# install.packages("scales")
+
+library(fmsb)
+library(scales)
+
+# Buang kolom cluster, jadikan row = cluster
+radar_df <- as.data.frame(mean_table[, -1])
+rownames(radar_df) <- paste0("Cluster ", mean_table$cluster)
+
+# Baris max & min per variabel (wajib untuk fmsb)
+maxs <- apply(radar_df, 2, max)
+mins <- apply(radar_df, 2, min)
+
+radar_data <- rbind(maxs, mins, radar_df)
+radar_data
+
+# Palet warna ceria (sama vibe dengan yang barplot tadi)
+colors_border <- c(
+  "#F6416C",  # bubblegum pink
+  "#F8C630",  # gold cerah
+  "#00E676",  # turquoise cerah
+  "#08D9D6"   # neon aqua
+)
+
+colors_in <- alpha(colors_border, 0.3)
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  # garis & isi tiap cluster
+  pcol = colors_border,
+  pfcol = colors_in,
+  plwd = 3,
+  plty = 1,
+  # garis grid
+  cglcol = "grey80",
+  cglty = 1,
+  cglwd = 0.8,
+  # label sumbu
+  axislabcol = "grey30",
+  vlcex = 0.9,
+  # judul
+  title = "Radar Chart Rata-Rata Indikator Kemiskinan per Cluster"
+)
+
+legend(
+  "topright",
+  legend = rownames(radar_data)[-c(1, 2)],  # kecuali baris max & min
+  bty = "n",
+  pch = 20,
+  col = colors_border,
+  text.col = "grey20",
+  cex = 0.9,
+  pt.cex = 1.6)
+```
+
+
+### Barplot Cluster
+
+```{r}
+# Buat tabel frekuensi
+cluster_count <- table(hasil$cluster)
+
+# Simpan posisi batang ke variabel bp
+bp <- barplot(cluster_count,
+              main = "Jumlah Kabupaten/Kota per Cluster",
+              xlab = "Cluster",
+              ylab = "Jumlah Kabupaten/Kota",
+              col  = c("#F6416C", "#F8C630",
+                       "#00E676","#08D9D6"),
+              ylim = c(0, max(cluster_count) + 2))  
+
+# Tambahkan label di dalam batang
+text(x = bp,
+     y = cluster_count/2,
+     labels = cluster_count,
+     cex = 1.2,
+     font = 2,
+     col = "black")
+```
+
+
+### Boxplot
+
+```{r}
+library(dplyr)
+library(tidyr)
+
+data_long <- hasil %>% 
+  pivot_longer(
+    cols = starts_with("X"),
+    names_to = "variabel",
+    values_to = "value"
+  )
+library(ggplot2)
+
+ggplot(data_long, aes(x = factor(cluster), y = value, fill = factor(cluster))) +
+  geom_boxplot(alpha = 0.8, outlier.color = "black") +
+  facet_wrap(~ variabel, scales = "free_y") +
+  scale_fill_manual(values = c(
+    "1" = "#F6416C",  # bubblegum pink
+    "2" = "#F8C630",  # gold cerah
+    "3" = "#00E676",  # turquoise cerah
+    "4" = "#08D9D6"   # neon aqua
+  )) +
+  theme_minimal(base_size = 13) +
+  labs(
+    title = "Boxplot Variabel per Cluster",
+    x = "Cluster",
+    y = "Nilai"
+  )
+```
+
+### HeatMap
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Ubah ke long format
+heat_long <- hasil %>% 
+  pivot_longer(
+    cols = starts_with("X"),
+    names_to = "variabel",
+    values_to = "value"
+  )
+
+# Urutkan kabupaten berdasarkan cluster biar rapi
+heat_long <- heat_long %>% 
+  arrange(cluster, Kabupaten.Kota) %>% 
+  mutate(Kabupaten.Kota = factor(Kabupaten.Kota, levels = unique(Kabupaten.Kota)))
+
+ggplot(heat_long, aes(x = variabel, y = Kabupaten.Kota, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradientn(
+    colours = c("#F8F9FA", "#FFDAC1", "#FF9AA2", "#FF6F91"),  # pastel ceria
+    name = "Nilai"
+  ) +
+  facet_grid(cluster ~ ., scales = "free_y", space = "free_y") +
+  labs(
+    title = "Heatmap Indikator Kemiskinan per Kabupaten/Kota\nDikelompokkan Berdasarkan Cluster",
+    x = "Variabel",
+    y = "Kabupaten/Kota"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    strip.background = element_rect(fill = "#FFE082", color = NA),
+    strip.text = element_text(face = "bold")
+  )
+```
+
+## Interpretasi Visualisasi
+
+Berdasarkan radar chart, barplot, boxplot, dan heatmap, terlihat bahwa setiap cluster memiliki pola kemiskinan yang berbeda dan konsisten antar visualisasi.
+**Cluster 1** menunjukkan tingkat kemiskinan paling berat yang ditandai dengan tingginya proporsi penduduk miskin yang tidak bekerja, pekerja formal berupah rendah, serta indeks keparahan kemiskinan, sehingga menggambarkan wilayah yang mengalami tekanan ekonomi paling besar. 
+**Cluster 2** memiliki nilai indikator yang berada pada tingkat menengah dan relatif stabil tanpa variabel ekstrem, sehingga menggambarkan daerah dengan kondisi kemiskinan moderat.
+**Cluster 3** dicirikan oleh tingginya akses rumah tangga miskin terhadap air dan jamban layak, namun tetap berada dalam kategori miskin karena keterbatasan pendapatan dan dominasi pekerjaan informal, sehingga kemiskinan di cluster ini lebih terkait pada faktor ekonomi dibandingkan infrastruktur dasar. Sementara itu, 
+**Cluster 4** menunjukkan nilai tinggi dan merata pada banyak indikator, termasuk pengeluaran rumah tangga miskin serta indeks kedalaman dan keparahan kemiskinan, yang menandakan adanya kemiskinan multidimensi yang kompleks.
+
+Secara keseluruhan, keempat visualisasi menunjukkan pola yang konsisten: Cluster 1 adalah kelompok paling rentan secara ekonomi, Cluster 2 adalah kelompok menengah, Cluster 3 memiliki infrastruktur dasar yang relatif baik tetapi lemah secara ekonomi, dan Cluster 4 mengalami kemiskinan multidimensi. Visualisasi-visualisasi tersebut secara bersama-sama memperkuat validitas hasil clustering dan memberikan pemahaman yang komprehensif mengenai karakteristik kemiskinan pada masing-masing kelompok wilayah.
