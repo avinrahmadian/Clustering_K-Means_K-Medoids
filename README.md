@@ -119,6 +119,7 @@ Berdasarkan matriks korelasi tersebut dilakukan seleksi variabel pada data. Sele
 Sebelum melakukan reduksi dimensi, terdapat beberapa hal yang harus diperhatikan diantaranya kecukupan data, kelayakan variabel, dan korelasi antar variabel.  
 #### Uji kecukupan data dan kelayakan variabel 
 Berdasarkan  uji kecukupan data dan kelayakan variabel dengan fungsi KMO() diperoleh Overall MSA sebesar 0.57. Kemudian, berikut nilai MSA dari masing-masing variabel.
+
 |Variabel | X1 | X2 | X4 | X6 | X7 | X8 |
 |Nilai MSA|0.48|0.53|0.83|0.62|0.59|0.44|
 
