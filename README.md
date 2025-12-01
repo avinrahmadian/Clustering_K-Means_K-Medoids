@@ -206,7 +206,7 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 ## D. Evaluasi dan Perbandingan Klaster
 | K-Means | K-Medoids |
 |---------|-----------|
-| <img src="Image/Silhouette K-Means.png" width="600"> | <img src="Image/Silhouette Width K-Medoids.png" width="600"> |
+| <img src="Image/Grafik Silhouette K-Means.png" width="600"> | <img src="Image/Silhouette Width K-Medoids.png" width="600"> |
 
 
 # 🎨 **Visualisasi Clustering**
