@@ -178,10 +178,6 @@ Algoritma K-Medoids, yang juga dikenal sebagai Partitioning Around Medoids (PAM)
 ### 1. Standarisasi Data 
 Data awal distandarisasi menggunakan metode z-score agar setiap variabel berada pada skala yang sama. Hal ini penting karena K-Medoids berbasis jarak, sehingga variabel berskala besar tidak mendominasi hasil pengelompokan. Standarisasi dilakukan menggunakan metode z-score dengan rumus sebagai berikut:
 
-<div align="center" style="background-color:#0f1419; padding:12px; border-radius:8px; width:45%; margin:auto;">
-  <img src="Image/Rumus_Zscore.png" alt="Rumus Z-Score" style="width:10%; max-width:40px;">
-</div>
-<br>
 
 Tabel berikut menampilkan cuplikan hasil standarisasi untuk beberapa kabupaten/kota:
 
