@@ -77,29 +77,26 @@ Untuk melakukan pengelompokan, dua metode algoritma yang sering digunakan dan me
    Penelitian ini merupakan penelitian kuantitatif eksploratir dengan pendekatan unsupervised learning menggunakan metode clustering. Tujuan utamanya adalah untuk mengelompokkan kabupaten/kota di Provinsi Jawa Barat berdasarkan karakteristik kemiskinan serta membandingkan hasil pengelompokan antara metode K-Means dan K-Medoids
 3. Tahapan Analisis Data <br>
    a. Prapemrosesan Data (Preprocessing)<br>
-   Pada tahapan ini dilakukan seleksi variabel, pemeriksaan missing value, serta melakukan standarisasi data menggunakan Z-score dengan menggunakan fungsi scaled() di R.
-   Standarisasi dilakukan karena K-Means dan K-Medoids berbasis perhitungan jarak, sehingga perbedaan skala antar variabel dapat menyebabkan distorsi hasil klasterisasi<br>
+   Pada tahapan ini dilakukan seleksi variabel untuk analisis dan pemeriksaan outlier. <br>
    b. Analisis Korelasi Antar Variabel<br>
    c. Analisis Reduksi Dimensi dengan PCA<br>
-4. Penentuan Jumlah Klaster Optimal<br>
-   Jumlah klaster (k) ditentukan menggunakan pendekatan Silhouette Method. Nilai K dipilih berdasarkan nilai silhouette tertinggi.
-5. Klasterisasi Menggunakan Metode K-Means<br>
+4. Klasterisasi Menggunakan Metode K-Means<br>
    K-Means adalah metode klasterisasi non-hierarkis yang mengelompokkan data ke dalam K klaster berdasarkan kedekatan jarak terhadap pusat klaster (centroid). Metode ini bertujuan meminimalkan jumlah kuadrat jarak dalam klaster (Within Cluster Sum of Squares/WCSS).<br>
    a. Menghitung jarak antar observasi <br>
    b. Menentukan banyaknya klaster optimal <br>
    c. Pembentukan klaster <br>
    d. Menghitung silhouette score <br>
    e. Profilisasi klaster <br>
-7. Klasterisasi Menggunakan Metode K-Medoids<br>
+5. Klasterisasi Menggunakan Metode K-Medoids<br>
    K-Medoids merupakan pengembangan dari K-means yang menggunakan medoid (objek aktual dalam dataset) sebagai pusat klaster. Metode ini dikenal sebagai algoritma PAM (Partitioning Around Medoids).
    a. Penentuan jumlah klaster menggunakan metode silhouette coefficient <br>
    b. Menentukan banyaknya klaster optimal <br>
    c. Pembentukan klaster <br>
    d. Menghitung silhouette score <br>
    e. Profilisasi klaster <br>
-9. Evaluasi dan Perbandingan Klaster<br>
+6. Evaluasi dan Perbandingan Klaster<br>
    Evaluasi dilakukan dengan membandingkan nilai Silhouette antar 2 metode.<br>
-11. Visualisasi Klaster <br>
+7. Visualisasi Klaster <br>
 
 
 ## A. Statistik Deskriptif
@@ -221,6 +218,7 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 |---------|-----------|
 | <img src="Image/Grafik Silhouette K-Means.png" width="600"> | <img src="Image/Silhouette Width K-Medoids.png" width="600"> |
 
+Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette rata-rata lebih tinggi (0.49) dibandingkan dengan K-Medoids (0.27). Hal ini menunjukkan bahwa hasil pengelompokan K-Means lebih kompak dan lebih terpisah antar-klaster dibandingkan K-Medoids. Pada K-Means, sebagian besar objek memiliki nilai silhouette di atas garis rata-rata, sedangkan pada K-Medoids banyak objek berada dekat atau di bawah nol, menandakan sejumlah titik kurang cocok berada pada klasternya. Dengan demikian, dalam data kemiskinan ini, K-Means menghasilkan struktur klaster yang lebih jelas, stabil, dan lebih baik kualitasnya dibandingkan K-Medoids.
 
 # 🎨 **Visualisasi Clustering**
 ## 1. 🗺️ Peta
