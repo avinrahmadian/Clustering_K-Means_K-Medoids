@@ -151,18 +151,31 @@ K-Means adalah metode klasterisasi non-hierarkis yang mengelompokkan data ke dal
 ### 1. Menghitung Jarak Antar Observasi
 Menghitung jarak Euclidean (atau jarak lain) antar observasi pada ruang data hasil standarisasi/PCA. Jarak ini digunakan untuk menentukan centroid terdekat pada proses K-Means.
 
-### 4. Menentukan Cluster Optimal dengan Silhouette
-a. K-Means
+### 2. Menentukan Cluster Optimal dengan Silhouette
 <div align="center" style="background-color:#0f1419; padding:12px; border-radius:8px; width:70%; margin:auto;">
   <img src="Image/shilouette K-means.png" alt="Cluster Optimal K-Medoids" style="width:50%; max-width:40px;">
 </div>
 <br>
 <div>Penentuan jumlah klaster optimal dilakukan menggunakan metode Silhouette pada skor hasil Analisis Komponen Utama (PCA). Berdasarkan grafik Silhouette, nilai rata-rata tertinggi diperoleh pada k = 4 dengan nilai sekitar 0,48. Hal ini menunjukkan bahwa pembentukan empat klaster memberikan struktur pengelompokan yang cukup baik, dengan tingkat homogenitas dalam klaster yang memadai serta separasi antar klaster yang jelas. Oleh karena itu, analisis klaster selanjutnya dilakukan menggunakan empat klaster.</div>
 
+### 3. Pembentukan dan Profilisasi Cluster
+Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan. Berikut hasil plot pengelompokkan kabupaten/kota ke dalam empat cluster.
+<div align="center" style="background-color:#0f1419; padding:12px; border-radius:8px; width:70%; margin:auto;">
+  <img src="Image/Cluster Plot K-Medoids.png" alt="Plot Cluster K-Medoids" style="width:50%; max-width:40px;">
+</div>
+<br>
+<div> Plot K-Means di atas menampilkan posisi Kabupaten/Kota dalam dua dimensi hasil pemetaan jarak, di mana sumbu X (Dim1) dan sumbu Y (Dim2) merepresentasikan dua dimensi utama dari jarak Euclidean setelah data distandarisasi, titik berwarna menunjukkan cluster masing-masing daerah, dan poligon menggambarkan sebaran objek dalam setiap cluster. Tabel anggota tiap kelompok disajikan dalam tabel berikut.
+
+| Kelompok | Kabupaten/Kota | Jumlah Anggota | Keterangan |
+|----------|-----------------|----------------|------------|
+| 1 | Bogor, Sukabumi, Bandung, Bekasi, Bandung Barat, Kota Tasikmalaya, Kota Banjar | 7 | Kemiskinan Rendah |
+| 2 | Karawang, Kota Bogor, Kota Sukabumi, Kota Bandung, Kota Cirebon, Kota Bekasi, Kota Depok, Kota Cimahi | 8 | Kemiskinan Tinggi |
+| 3 | Cianjur, Ciamis, Kuningan, Cirebon, Majalengka, Sumedang, Indramayu, Subang, Purwakarta | 9 | Kemiskinan Cukup Tinggi |
+| 4 | Garut, Tasikmalaya, Pangandaran | 3 | Kemiskinan Sedang |
 
 ## C. Metode K-Medoids
 Algoritma K-Medoids, yang juga dikenal sebagai Partitioning Around Medoids (PAM), merupakan variasi dari metode K-Means. Berbeda dengan K-Means yang menggunakan nilai rata-rata (mean) sebagai pusat klaster, K-Medoids memilih titik data asli sebagai pusat klaster sehingga lebih tahan terhadap outlier dan mengurangi pengaruh nilai ekstrem pada proses pengelompokan (Supriyadi et al., 2021).
-#### 1. Standarisasi Data 
+### 1. Standarisasi Data 
 Data awal distandarisasi menggunakan metode z-score agar setiap variabel berada pada skala yang sama. Hal ini penting karena K-Medoids berbasis jarak, sehingga variabel berskala besar tidak mendominasi hasil pengelompokan. Standarisasi dilakukan menggunakan metode z-score dengan rumus sebagai berikut:
 
 <div align="center" style="background-color:#0f1419; padding:12px; border-radius:8px; width:45%; margin:auto;">
@@ -188,7 +201,7 @@ Penentuan jumlah klaster optimal dilakukan menggunakan metode Silhouette. Beriku
 <br>
 <div> Berdasarkan grafik Silhouette, terlihat bahwa garis putus-putus menunjukkan kelompok optimal dalam melakukan clustering. Kelompok optimal dalam data ini berjumlah empat kelompok dengan nilai silhouette diantara 0.2-0.3 yang menunjukkan bahwa observasi di tiap kelompok cenderung jauh satu sama lain dan dekat dengan observasi dari kelompok lain. Jadi, pengelompokkan dapat dikatakan kurang baik. </div>
 
-#### 3. Pembentukan dan Profilisasi Cluster
+### 3. Pembentukan dan Profilisasi Cluster
 Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan. Berikut hasil plot pengelompokkan kabupaten/kota ke dalam empat cluster.
 <div align="center" style="background-color:#0f1419; padding:12px; border-radius:8px; width:70%; margin:auto;">
   <img src="Image/Cluster Plot K-Medoids.png" alt="Plot Cluster K-Medoids" style="width:50%; max-width:40px;">
