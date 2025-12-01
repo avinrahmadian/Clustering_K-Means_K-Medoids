@@ -216,7 +216,7 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 ## D. Evaluasi dan Perbandingan Klaster
 | K-Means | K-Medoids |
 |---------|-----------|
-| <img src="Image/Grafik Silhouette K-Means.png" width="600"> | <img src="Image/Silhouette Width K-Medoids.png" width="600"> |
+| <img src="Image/Silhouette_K-Means.png" width="600"> | <img src="Image/Silhouette Width K-Medoids.png" width="600"> |
 
 Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette rata-rata lebih tinggi (0.49) dibandingkan dengan K-Medoids (0.27). Hal ini menunjukkan bahwa hasil pengelompokan K-Means lebih kompak dan lebih terpisah antar-klaster dibandingkan K-Medoids. Pada K-Means, sebagian besar objek memiliki nilai silhouette di atas garis rata-rata, sedangkan pada K-Medoids banyak objek berada dekat atau di bawah nol, menandakan sejumlah titik kurang cocok berada pada klasternya. Dengan demikian, dalam data kemiskinan ini, K-Means menghasilkan struktur klaster yang lebih jelas, stabil, dan lebih baik kualitasnya dibandingkan K-Medoids.
 
