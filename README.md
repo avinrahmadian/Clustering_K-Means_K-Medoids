@@ -85,15 +85,24 @@ Untuk melakukan pengelompokan, dua metode algoritma yang sering digunakan dan me
    Jumlah klaster (k) ditentukan menggunakan pendekatan Silhouette Method. Nilai K dipilih berdasarkan nilai silhouette tertinggi.
 5. Klasterisasi Menggunakan Metode K-Means<br>
    K-Means adalah metode klasterisasi non-hierarkis yang mengelompokkan data ke dalam K klaster berdasarkan kedekatan jarak terhadap pusat klaster (centroid). Metode ini bertujuan meminimalkan jumlah kuadrat jarak dalam klaster (Within Cluster Sum of Squares/WCSS).<br>
+   a. Menghitung jarak antar observasi <br>
+   b. Menentukan banyaknya klaster optimal <br>
+   c. Pembentukan klaster <br>
+   d. Menghitung silhouette score <br>
+   e. Profilisasi klaster <br>
 7. Klasterisasi Menggunakan Metode K-Medoids<br>
-   K-Medoids merupakan pengembangan dari K-means yang menggunakan medoid (objek aktual dalam dataset) sebagai pusat klaster. Metode ini dikenal sebagai algoritma PAM (Partitioning Around Medoids)
+   K-Medoids merupakan pengembangan dari K-means yang menggunakan medoid (objek aktual dalam dataset) sebagai pusat klaster. Metode ini dikenal sebagai algoritma PAM (Partitioning Around Medoids).
+   a. Penentuan jumlah klaster menggunakan metode silhouette coefficient <br>
+   b. Menentukan banyaknya klaster optimal <br>
+   c. Pembentukan klaster <br>
+   d. Menghitung silhouette score <br>
+   e. Profilisasi klaster <br>
 9. Evaluasi dan Perbandingan Klaster<br>
    Evaluasi dilakukan dengan membandingkan nilai Silhouette antar 2 metode.<br>
-10. Interpretasi Profil Klaster<br>
-11. Visualisasi Hasil<br>
+11. Visualisasi Klaster <br>
 
 
-### A. Statistik Deskriptif
+## A. Statistik Deskriptif
 Statistik deskriptif digunakan untuk memberikan gambaran umum mengenai sebaran nilai indikator kemiskinan pada 27 kabupaten/kota di Provinsi Jawa Barat. Berdasarkan tabel di bawah, terlihat bahwa setiap variabel memiliki nilai rata-rata dan variasi yang berbeda, sehingga menunjukkan adanya perbedaan kondisi antar wilayah dan pentingnya dilakukan analisis lanjutan seperti clustering.
 
 | Variabel|  N |  Mean | Std Dev |  Min  |   Q1   | Median |   Q3   |  Max  |
@@ -121,6 +130,7 @@ Sebelum melakukan reduksi dimensi, terdapat beberapa hal yang harus diperhatikan
 Berdasarkan  uji kecukupan data dan kelayakan variabel dengan fungsi KMO() diperoleh Overall MSA sebesar 0.57. Kemudian, berikut nilai MSA dari masing-masing variabel.
 
 |Variabel | X1 | X2 | X4 | X6 | X7 | X8 |
+|---------|----|----|----|----|----|----|
 |Nilai MSA|0.48|0.53|0.83|0.62|0.59|0.44|
 
 Selain variabel X8 diperoleh nilai MSA lebih dari 0.5 yang artinya  variabel-variabel tersebut tidak dikeluarkan dan layak. Namun, variabel X8 tetap dipertahankan karena PCA dilakukan untuk reduksi dimensi sebelum clustering.
@@ -134,14 +144,14 @@ Jumlah faktor yang terbentuk ditentukan menggunakan eigen values. Nilai eigen di
 
 Penentuan banyaknya komponen yang terbentuk dilakukan dengan melihat nilai diatas 1. Oleh karena itu, hasil tersebut nilai yang diatas satu terdapat pada komponen utama ke-1 dan ke-2. Komponen tersebut yang akan digunakan dalam klasterisasi menggunakan K-Means.
 
-### B. Metode K-Means
+## B. Metode K-Means
 K-Means adalah metode klasterisasi non-hierarkis yang mengelompokkan data ke dalam K klaster berdasarkan kedekatan jarak terhadap pusat klaster (centroid). Metode ini bertujuan meminimalkan jumlah kuadrat jarak dalam klaster (Within Cluster Sum of Squares/WCSS).
 
 
-#### 1. Menghitung Jarak Antar Observasi
+### 1. Menghitung Jarak Antar Observasi
 Menghitung jarak Euclidean (atau jarak lain) antar observasi pada ruang data hasil standarisasi/PCA. Jarak ini digunakan untuk menentukan centroid terdekat pada proses K-Means.
 
-#### 4. Menentukan Cluster Optimal dengan Silhouette
+### 4. Menentukan Cluster Optimal dengan Silhouette
 a. K-Means
 <div align="center" style="background-color:#0f1419; padding:12px; border-radius:8px; width:70%; margin:auto;">
   <img src="Image/shilouette K-means.png" alt="Cluster Optimal K-Medoids" style="width:50%; max-width:40px;">
@@ -150,7 +160,7 @@ a. K-Means
 <div>Penentuan jumlah klaster optimal dilakukan menggunakan metode Silhouette pada skor hasil Analisis Komponen Utama (PCA). Berdasarkan grafik Silhouette, nilai rata-rata tertinggi diperoleh pada k = 4 dengan nilai sekitar 0,48. Hal ini menunjukkan bahwa pembentukan empat klaster memberikan struktur pengelompokan yang cukup baik, dengan tingkat homogenitas dalam klaster yang memadai serta separasi antar klaster yang jelas. Oleh karena itu, analisis klaster selanjutnya dilakukan menggunakan empat klaster.</div>
 
 
-### C. Metode K-Medoids
+## C. Metode K-Medoids
 Algoritma K-Medoids, yang juga dikenal sebagai Partitioning Around Medoids (PAM), merupakan variasi dari metode K-Means. Berbeda dengan K-Means yang menggunakan nilai rata-rata (mean) sebagai pusat klaster, K-Medoids memilih titik data asli sebagai pusat klaster sehingga lebih tahan terhadap outlier dan mengurangi pengaruh nilai ekstrem pada proses pengelompokan (Supriyadi et al., 2021).
 #### 1. Standarisasi Data 
 Data awal distandarisasi menggunakan metode z-score agar setiap variabel berada pada skala yang sama. Hal ini penting karena K-Medoids berbasis jarak, sehingga variabel berskala besar tidak mendominasi hasil pengelompokan. Standarisasi dilakukan menggunakan metode z-score dengan rumus sebagai berikut:
@@ -193,39 +203,10 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 | 3 | Cianjur, Ciamis, Kuningan, Cirebon, Majalengka, Sumedang, Indramayu, Subang, Purwakarta, Karawang | 10 | Kemiskinan Tinggi |
 | 4 | Kota Bekasi, Kota Depok, Kota Cimahi | 3 | Kemiskinan Sedang |
 
-
+## D. Evaluasi dan Perbandingan Klaster
 | K-Means | K-Medoids |
 |---------|-----------|
-| <img src="Image/Peta_K-means.png" width="600"> | <img src="Image/Peta_K-medoids.png" width="600"> |
-
-**Gambar 1. Perbandingan Peta Klasterisasi Tingkat Kemiskinan**
-
-<table style="width:100%">
-  <tr>
-    <td align="center" width="50%">
-      <img src="Image/Map_K-means.png" width="100%">
-      <br><b>K-Means</b>
-    </td>
-    <td align="center" width="50%">
-      <img src="Image/Map_K-medoids.png" width="100%">
-      <br><b>K-Medoids</b>
-    </td>
-  </tr>
-</table>
-
-<table style="width:100%">
-  <tr>
-    <td align="center" width="50%">
-      <img src="Image/Peta_K-means.png" width="100%">
-      <div><i>Gambar 1.</i> Klasterisasi K-Means</div>
-    </td>
-    <td align="center" width="50%">
-      <img src="Image/Peta_K-medoids.png" width="100%">
-      <div><i>Gambar 2.</i> Klasterisasi K-Medoids</div>
-    </td>
-  </tr>
-</table>
-
+| <img src="Image/Silhouette K-Means.png" width="600"> | <img src="Image/Silhouette Width K-Medoids.png" width="600"> |
 
 
 # 🎨 **Visualisasi Clustering**
