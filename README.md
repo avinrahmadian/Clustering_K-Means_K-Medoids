@@ -221,7 +221,7 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette rata-rata lebih tinggi (0.49) dibandingkan dengan K-Medoids (0.27). Hal ini menunjukkan bahwa hasil pengelompokan K-Means lebih kompak dan lebih terpisah antar-klaster dibandingkan K-Medoids. Pada K-Means, sebagian besar objek memiliki nilai silhouette di atas garis rata-rata, sedangkan pada K-Medoids banyak objek berada dekat atau di bawah nol, menandakan sejumlah titik kurang cocok berada pada klasternya. Dengan demikian, dalam data kemiskinan ini, K-Means menghasilkan struktur klaster yang lebih jelas, stabil, dan lebih baik kualitasnya dibandingkan K-Medoids.
 
 # 🎨 **Visualisasi Clustering**
-## 1. 🗺️ Peta
+## 1. Peta 🗺️
 <table align="center">
   <tr>
     <th> <b>Peta – K-Means</b></th>
@@ -234,7 +234,7 @@ Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette 
 </table>
 
 
-## 2. 📊 Barplot
+## 2. Barplot 📊
 <table align="center">
   <tr>
     <th> <b>Barplot – K-Means</b></th>
@@ -247,7 +247,7 @@ Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette 
 </table>
 
 
-## 3. 🕸️ Radar Chart
+## 3. Radar Chart 🕸️
 <table align="center">
   <tr>
     <th> <b>Radar – K-Means</b></th>
@@ -260,7 +260,7 @@ Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette 
 </table>
 
 
-## 4. 📦 Boxplot
+## 4. Boxplot 📦
 <table align="center">
   <tr>
     <th> <b>Boxplot – K-Means</b></th>
@@ -272,7 +272,7 @@ Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette 
   </tr>
 </table>
 
-## 5. 🔥 Heatmap
+## 5. Heatmap 🔥
  <table align="center">
   <tr>
     <th> <b>Heatmap – K-Means</b></th>
