@@ -119,7 +119,7 @@ Statistik deskriptif digunakan untuk memberikan gambaran umum mengenai sebaran n
   <img src="Image/Matriks Korelasi Awal.png" alt="Matriks Korelasi" style="width:50%; max-width:40px;">
 </div>
 
-Berdasarkan matriks korelasi tersebut dilakukan seleksi variabel pada data. Seleki dilakukan dengan memerhatikan korelasi antar variabel, sehingga yang dibuang adalah variabel X3, X5 dan X9. Variabel yang telah diseleksi yaitu X1, X2, X4, X6, X7, X8 akan digunakan dalam melakukan analisis komponen utama. 
+Berdasarkan matriks korelasi tersebut dilakukan seleksi variabel pada data. Seleki dilakukan dengan memperhatikan korelasi antar variabel, sehingga yang dibuang adalah variabel X3, X5 dan X9. Variabel yang telah diseleksi yaitu X1, X2, X4, X6, X7, X8 akan digunakan dalam melakukan analisis komponen utama. 
 
 ### Analisis Komponen Utama (PCA)
 Sebelum melakukan reduksi dimensi, terdapat beberapa hal yang harus diperhatikan diantaranya kecukupan data, kelayakan variabel, dan korelasi antar variabel.  
