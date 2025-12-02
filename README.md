@@ -88,7 +88,7 @@ Untuk melakukan pengelompokan, dua metode algoritma yang sering digunakan dan me
    d. Menghitung silhouette score <br>
    e. Profilisasi klaster <br>
 5. Klasterisasi Menggunakan Metode K-Medoids<br>
-   K-Medoids merupakan pengembangan dari K-means yang menggunakan medoid (objek aktual dalam dataset) sebagai pusat klaster. Metode ini dikenal sebagai algoritma PAM (Partitioning Around Medoids).
+   K-Medoids merupakan pengembangan dari K-means yang menggunakan medoid (objek aktual dalam dataset) sebagai pusat klaster. Metode ini dikenal sebagai algoritma PAM (Partitioning Around Medoids).<br>
    a. Penentuan jumlah klaster menggunakan metode silhouette coefficient <br>
    b. Menentukan banyaknya klaster optimal <br>
    c. Pembentukan klaster <br>
@@ -143,7 +143,6 @@ Penentuan banyaknya komponen yang terbentuk dilakukan dengan melihat nilai diata
 
 ## B. Metode K-Means
 K-Means adalah metode klasterisasi non-hierarkis yang mengelompokkan data ke dalam K klaster berdasarkan kedekatan jarak terhadap pusat klaster (centroid). Metode ini bertujuan meminimalkan jumlah kuadrat jarak dalam klaster (Within Cluster Sum of Squares/WCSS).
-
 
 ### 1. Menghitung Jarak Antar Observasi
 Menghitung jarak Euclidean (atau jarak lain) antar observasi pada ruang data hasil standarisasi/PCA. Jarak ini digunakan untuk menentukan centroid terdekat pada proses K-Means.
