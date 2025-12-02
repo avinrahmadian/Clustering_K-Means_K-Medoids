@@ -228,17 +228,6 @@ Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette 
     <th> <b>Peta – K-Medoids</b></th>
   </tr>
   <tr>
-    <td><img src="Image/K-Means_Map.jpg" width="450"></td>
-    <td><img src="Image/K-Medoids_Map.jpg" width="450"></td>
-  </tr>
-</table>
-
-<table align="center">
-  <tr>
-    <th> <b>Peta – K-Means</b></th>
-    <th> <b>Peta – K-Medoids</b></th>
-  </tr>
-  <tr>
     <td><img src="Image/K-Means_Peta.png" width="450"></td>
     <td><img src="Image/K-Medoids_Peta.png" width="450"></td>
   </tr>
