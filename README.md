@@ -114,7 +114,7 @@ Statistik deskriptif digunakan untuk memberikan gambaran umum mengenai sebaran n
 | **X8**  | 27 |  1.18 |   0.43  |  0.34 |  0.88  |  1.17  |  1.50  |  2.05 |
 | **X9**  | 27 |  0.28 |   0.13  |  0.07 |  0.20  |  0.26  |  0.36  |  0.54 |
 
-#### Matriks Korelasi
+### Matriks Korelasi
 <div align="center" style="background-color:#0f1419; padding:12px; border-radius:8px; width:70%; margin:auto;">
   <img src="Image/Matriks Korelasi Awal.png" alt="Matriks Korelasi" style="width:50%; max-width:40px;">
 </div>
@@ -123,7 +123,7 @@ Berdasarkan matriks korelasi tersebut dilakukan seleksi variabel pada data. Sele
 
 ### Analisis Komponen Utama (PCA)
 Sebelum melakukan reduksi dimensi, terdapat beberapa hal yang harus diperhatikan diantaranya kecukupan data, kelayakan variabel, dan korelasi antar variabel.  
-#### Uji kecukupan data dan kelayakan variabel 
+#### - Uji kecukupan data dan kelayakan variabel 
 Berdasarkan  uji kecukupan data dan kelayakan variabel dengan fungsi KMO() diperoleh Overall MSA sebesar 0.57. Kemudian, berikut nilai MSA dari masing-masing variabel.
 
 |Variabel | X1 | X2 | X4 | X6 | X7 | X8 |
@@ -131,9 +131,10 @@ Berdasarkan  uji kecukupan data dan kelayakan variabel dengan fungsi KMO() diper
 |Nilai MSA|0.48|0.53|0.83|0.62|0.59|0.44|
 
 Selain variabel X8 diperoleh nilai MSA lebih dari 0.5 yang artinya  variabel-variabel tersebut tidak dikeluarkan dan layak. Namun, variabel X8 tetap dipertahankan karena PCA dilakukan untuk reduksi dimensi sebelum clustering.
-#### Korelasi antar variabel
+### - Korelasi antar variabel
 Dengan menggunakan bartlett’s test of sphericity diperoleh p-value sebesar 1.520684e-08, artinya minimal terdapat satu korelasi antar variabel.
-#### Pembentukan Komponen Utama
+
+### Pembentukan Komponen Utama
 Jumlah faktor yang terbentuk ditentukan menggunakan eigen values. Nilai eigen diperoleh dari korelasi data yang dieigen-kan dan diperoleh eigen values sebagai berikut.
 <div align="center" style="background-color:#0f1419; padding:12px; border-radius:8px; width:70%; margin:auto;">
   <img src="Image/nilai eigen.png" alt="Nilai Eigen" style="width:50%; max-width:40px;">
