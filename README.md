@@ -122,8 +122,8 @@ Statistik deskriptif digunakan untuk memberikan gambaran umum mengenai sebaran n
 Berdasarkan matriks korelasi tersebut dilakukan seleksi variabel pada data. Seleki dilakukan dengan memperhatikan korelasi antar variabel, sehingga yang dibuang adalah variabel X3, X5 dan X9. Variabel yang telah diseleksi yaitu X1, X2, X4, X6, X7, X8 akan digunakan dalam melakukan analisis komponen utama. 
 
 ### Analisis Komponen Utama (PCA)
-Sebelum melakukan reduksi dimensi, terdapat beberapa hal yang harus diperhatikan diantaranya kecukupan data, kelayakan variabel, dan korelasi antar variabel.  
-#### - Uji kecukupan data dan kelayakan variabel 
+Sebelum melakukan reduksi dimensi, terdapat beberapa hal yang harus diperhatikan diantaranya kecukupan data, kelayakan variabel, dan korelasi antar variabel yang sebelumnya telah dilakukan pengecekan. 
+
 Berdasarkan  uji kecukupan data dan kelayakan variabel dengan fungsi KMO() diperoleh Overall MSA sebesar 0.57. Kemudian, berikut nilai MSA dari masing-masing variabel.
 
 |Variabel | X1 | X2 | X4 | X6 | X7 | X8 |
@@ -131,8 +131,6 @@ Berdasarkan  uji kecukupan data dan kelayakan variabel dengan fungsi KMO() diper
 |Nilai MSA|0.48|0.53|0.83|0.62|0.59|0.44|
 
 Selain variabel X8 diperoleh nilai MSA lebih dari 0.5 yang artinya  variabel-variabel tersebut tidak dikeluarkan dan layak. Namun, variabel X8 tetap dipertahankan karena PCA dilakukan untuk reduksi dimensi sebelum clustering.
-### - Korelasi antar variabel
-Dengan menggunakan bartlett’s test of sphericity diperoleh p-value sebesar 1.520684e-08, artinya minimal terdapat satu korelasi antar variabel.
 
 ### Pembentukan Komponen Utama
 Jumlah faktor yang terbentuk ditentukan menggunakan eigen values. Nilai eigen diperoleh dari korelasi data yang dieigen-kan dan diperoleh eigen values sebagai berikut.
@@ -169,6 +167,7 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
 | 2 | Karawang, Kota Bogor, Kota Sukabumi, Kota Bandung, Kota Cirebon, Kota Bekasi, Kota Depok, Kota Cimahi | 8 | Kemiskinan Tinggi |
 | 3 | Cianjur, Ciamis, Kuningan, Cirebon, Majalengka, Sumedang, Indramayu, Subang, Purwakarta | 9 | Kemiskinan Cukup Tinggi |
 | 4 | Garut, Tasikmalaya, Pangandaran | 3 | Kemiskinan Sedang |
+
 
 ## C. Metode K-Medoids
 Algoritma K-Medoids, yang juga dikenal sebagai Partitioning Around Medoids (PAM), merupakan variasi dari metode K-Means. Berbeda dengan K-Means yang menggunakan nilai rata-rata (mean) sebagai pusat klaster, K-Medoids memilih titik data asli sebagai pusat klaster sehingga lebih tahan terhadap outlier dan mengurangi pengaruh nilai ekstrem pada proses pengelompokan (Supriyadi et al., 2021).
