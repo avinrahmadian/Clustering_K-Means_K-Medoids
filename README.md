@@ -9,19 +9,9 @@ Proyek ini menganalisis **pengelompokan wilayah di Jawa Barat** berdasarkan **in
 
 # 💡 **Latar Belakang**
 
-Provinsi Jawa Barat merupakan salah satu provinsi dengan jumlah penduduk terpadat dan kontributor Produk Domestik Regional Bruto (PDRB) terbesar di Indonesia. Meskipun menunjukkan pertumbuhan ekonomi yang pesat, isu kemiskinan tetap menjadi masalah struktural yang memerlukan penanganan serius. Data menunjukkan bahwa disparitas kemiskinan antar wilayah (Kabupaten/Kota) di Jawa Barat cukup signifikan, dipengaruhi oleh berbagai faktor mulai dari akses pendidikan, lapangan kerja, infrastruktur, hingga kondisi geografis.
+Provinsi Jawa Barat merupakan wilayah berpenduduk besar dan kontributor utama PDRB Indonesia, namun masih menghadapi persoalan kemiskinan dengan disparitas antar Kabupaten/Kota yang cukup tinggi. Karena karakteristik kemiskinan tiap wilayah berbeda, upaya pengentasan tidak bisa dilakukan secara seragam dan membutuhkan pemahaman yang lebih mendalam terhadap pola dan kondisi tiap daerah.
 
-Penanganan kemiskinan yang efektif tidak bisa dilakukan dengan pendekatan one-size-fits-all (satu ukuran untuk semua). Kebijakan pengentasan kemiskinan harus diferensiasi dan spesifik berdasarkan karakteristik dan profil kemiskinan yang unik di setiap wilayah. Hal ini menuntut adanya proses identifikasi dan pengelompokan wilayah yang memiliki profil kemiskinan serupa.
-
-Dalam konteks analisis data pembangunan, teknik pengelompokan data (clustering) menjadi instrumen krusial untuk mengelompokkan data multidimensi (berbagai indikator kemiskinan) menjadi kelompok-kelompok homogen (klaster). Melalui klasterisasi, pemerintah daerah dapat:
- * Mengenali pola-pola kemiskinan yang serupa di berbagai wilayah.
- * Memfokuskan sumber daya dan program bantuan pada klaster wilayah yang membutuhkan intervensi    spesifik.
- * Menetapkan prioritas kebijakan berdasarkan tipe-tipe kemiskinan yang teridentifikasi.
-
-Untuk melakukan pengelompokan, dua metode algoritma yang sering digunakan dan menjadi fokus perbandingan adalah K-Means dan K-Medoids (Partitioning Around Medoids - PAM).
- 1. K-Means: Metode yang populer karena efisiensi komputasi dan kesederhanaannya. Namun, K-       Means menggunakan nilai rata-rata (mean) sebagai pusat klaster (centroid), menjadikannya        rentan terhadap outliers (data pencilan) atau nilai-nilai ekstrem. Data karakteristik           kemiskinan, seperti persentase pengangguran atau rata-rata lama sekolah, seringkali             mengandung outliers yang dapat mendistorsi hasil klasterisasi.
- 2. K-Medoids (PAM): Metode ini mengatasi kelemahan K-Means dengan menggunakan medoids (titik     data aktual) sebagai pusat klaster, bukan rata-rata. Pendekatan ini membuat K-Medoids lebih     robust terhadap outliers karena pusat klaster tidak ditarik oleh nilai ekstrem.
-
+Untuk itu, klasterisasi digunakan sebagai alat untuk mengelompokkan wilayah berdasarkan kesamaan indikator kemiskinan sehingga kebijakan dapat lebih terarah dan spesifik. Dalam penelitian ini dibandingkan metode K-Means dan K-Medoids: K-Means cepat namun sensitif terhadap outliers, sementara K-Medoids lebih robust karena menggunakan medoids sebagai pusat klaster, menjadikannya lebih sesuai untuk data kemiskinan yang kerap mengandung nilai ekstrem.
 
 # 🎯 **Tujuan Penelitian**
 1️⃣ **Mengelompokkan** wilayah di Jawa Barat berdasarkan karakteristik kemiskinan **menggunakan** metode klasterisasi ***K-Means*** dan ***K-Medoids***. <br>
@@ -159,7 +149,8 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
   <img src="Image/K-means_PCA.png" alt="Plot Cluster K-Medoids" style="width:50%; max-width:40px;">
 </div>
 <br>
-<div> Plot K-Means di atas menampilkan posisi Kabupaten/Kota dalam dua dimensi hasil pemetaan jarak, di mana sumbu X (Comp.1) dan sumbu Y (Comp.2) merepresentasikan dua dimensi utama dari jarak Euclidean setelah data distandarisasi, titik berwarna menunjukkan cluster masing-masing daerah, dan poligon menggambarkan sebaran objek dalam setiap cluster. Tabel anggota tiap kelompok disajikan dalam tabel berikut.
+<div> Plot K-Means di atas menampilkan posisi Kabupaten/Kota dalam dua dimensi hasil pemetaan jarak, di mana sumbu X (Comp.1) dan sumbu Y (Comp.2) merepresentasikan dua dimensi utama dari jarak Euclidean setelah data distandarisasi, titik berwarna menunjukkan cluster masing-masing daerah, dan poligon menggambarkan sebaran objek dalam setiap cluster. 
+Penentuan kategori tingkat kemiskinan setiap klaster berdasarkan rata-rata variabel X1–X9 yang dihitung untuk masing-masing kelompok. Nilai rata-rata tersebut kemudian dibandingkan dengan pola umum antar klaster untuk melihat apakah suatu kelompok cenderung memiliki nilai indikator lebih tinggi atau lebih rendah. Anggota tiap klaster yang telah ditentukan kategorinya tersajikan dalam tabel berikut.
 
 | Kelompok | Kabupaten/Kota | Jumlah Anggota | Keterangan |
 |----------|-----------------|----------------|------------|
@@ -203,9 +194,10 @@ Setelah memperoleh jumlah cluster optimal, dapat dilakukan proses pengelompokkan
   <img src="Image/Cluster Plot K-Medoids.png" alt="Plot Cluster K-Medoids" style="width:50%; max-width:40px;">
 </div>
 <br>
-<div> Plot K-Medoids di atas menampilkan posisi Kabupaten/Kota dalam dua dimensi hasil pemetaan jarak, di mana sumbu X (Dim1) dan sumbu Y (Dim2) merepresentasikan dua dimensi utama dari jarak Euclidean setelah data distandarisasi, titik berwarna menunjukkan cluster masing-masing daerah, dan poligon menggambarkan sebaran objek dalam setiap cluster. Tabel anggota tiap kelompok disajikan dalam tabel berikut.
+<div> Plot K-Medoids di atas menampilkan posisi Kabupaten/Kota dalam dua dimensi hasil pemetaan jarak, di mana sumbu X (Dim1) dan sumbu Y (Dim2) merepresentasikan dua dimensi utama dari jarak Euclidean setelah data distandarisasi, titik berwarna menunjukkan cluster masing-masing daerah, dan poligon menggambarkan sebaran objek dalam setiap cluster.
+Adapun profilisasi pada k-medoids sama seperti k-means yaitu menentukan kategori berdasarkan rata-rata variabel X1–X9 yang dihitung untuk masing-masing kelompok. Berikut merupakan hasil profilisasi klaster.
 
-| Kelompok | Kabupaten/Kota | Jumlah Anggota | Keterangan |
+| Kelompok | Kabupaten/Kota | Jumlah Anggota | Kategori |
 |----------|-----------------|----------------|------------|
 | 1 | Bogor, Bandung, Bekasi, Bandung Barat, Kota Bogor, Kota Sukabumi, Kota Bandung, Kota Cirebon, Kota Tasikmalaya | 9 | Kemiskinan Sedang |
 | 2 | Sukabumi, Garut, Tasikmalaya, Pangandaran, Kota Banjar | 5 | Kemiskinan Rendah |
@@ -231,6 +223,14 @@ Berdasarkan grafik silhouette diketahui bahwa K-Means memiliki nilai silhouette 
     <td><img src="Image/K-Medoids_Peta.png" width="450"></td>
   </tr>
 </table>
+
+Keterangan Peta:
+| Warna | Kategori |
+|---------|-----------|
+| Merah | Kemiskinan Tinggi |
+| Kuning | Kemiskinan Cukup Tinggi |
+| Biru | Kemiskinan Sedang |
+| Hijau | Kemiskinan Rendah |
 
 ## 2. Barplot 📊
 <table align="center">
